@@ -96,15 +96,17 @@ open(ONLINE_BIOREACTOR_DATA_PATH) do file
     end
 end
 datasetOnline = datasetOnline/10^6;
-println(datasetOnline[length(datasetOnline)])
 
 phase ="before_transfection";
 phase ="after_transfection";
 
 if phase=="before_transfection"
-        offline_bioreactor=offline_bioreactor(1:3,:); #OFFLINE dataset 
+        offline_bioreactor=offline_bioreactor[1:3,:]; #OFFLINE dataset 
     else
-        offline_bioreactor=offline_bioreactor(4:9,:); #OFFLINE dataset
+        offline_bioreactor=offline_bioreactor[4:9,:]; #OFFLINE dataset
 end
 
 RUNS=[8 9]; #[1 2 3 4 5 6 7 8]
+
+###########################
+

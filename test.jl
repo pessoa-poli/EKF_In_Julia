@@ -16,3 +16,7 @@ println(in("mango"=>"tartar"))
 a = 10
 A = 20
 @printf("A : %s\na: %s\n", A, a)
+
+ar = [1 2 3; 4 5 6; 7 8 9]
+ar = ar[1:2,2:3]
+println(ar)
