@@ -1,5 +1,6 @@
 using Printf
 using Statistics
+using LinearAlgebra
 
 a11 = [n * m for n in 1:5, m in 1:5]
 println(a11)
@@ -15,8 +16,11 @@ println(in("mango"=>"tartar"))
 
 a = 10
 A = 20
-@printf("A : %s\na: %s\n", A, a)
+@printf("A : %s\na[ 0.02 ]: %s\n", A, a)
 
 ar = [1 2 3; 4 5 6; 7 8 9]
 ar = ar[1:2,2:3]
 println(ar)
+
+# Getting a diagonal matrix with a given size and given diagonal value:
+println(Diagonal([0.02 for cat in 1:5]))
