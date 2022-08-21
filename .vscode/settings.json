@@ -1,4 +1,3 @@
 {
-    "makefile.extensionOutputFolder": "./.vscode",
-    "julia.environmentPath": "julia-1.7.3/bin"
+    "makefile.extensionOutputFolder": "./.vscode"
 }

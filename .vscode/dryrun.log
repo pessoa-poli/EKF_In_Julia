@@ -1,6 +1,6 @@
 make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/home/luado/Monography2022-LOCAL/EKF_In_Julia'
-make: Leaving directory '/home/luado/Monography2022-LOCAL/EKF_In_Julia'
+make: Entering directory '/home/luado/projetos/EKF_In_Julia'
+clear && \
+time julia TheKalmanFilterForTheSupervisionOfTheKultivationProcess/TheKalmanFilterForTheSupervision.jl
+make: Leaving directory '/home/luado/projetos/EKF_In_Julia'
  
-make: *** No targets specified and no makefile found.  Stop.
-

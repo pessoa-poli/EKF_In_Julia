@@ -1,0 +1,8 @@
+using Symbolics
+export P
+@variables P1_1 P1_2 P1_3 P1_4 P1_5 P2_1 P2_2 P2_3 P2_4 P2_5 P3_1 P3_2 P3_3 P3_4 P3_5 P4_1 P4_2 P4_3 P4_4 P4_5 P5_1 P5_2 P5_3 P5_4 P5_5
+P = [P1_1 P1_2 P1_3 P1_4 P1_5;
+P2_1 P2_2 P2_3 P2_4 P2_5;
+P3_1 P3_2 P3_3 P3_4 P3_5;
+P4_1 P4_2 P4_3 P4_4 P4_5;
+P5_1 P5_2 P5_3 P5_4 P5_5]

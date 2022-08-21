@@ -1,27 +1,19 @@
-using Printf, LinearAlgebra
- 
-# Parameter values used for the simulation model
-Kg = 0.1 # gL⁻¹ Monod Constant Glucose
-Ke = 0.1 # gL⁻¹ Monod Constant Ethanol
-Ygx = 0.17 # gg⁻¹ Conversion factor glucose to biomass
-Yge = 0.46 # gg⁻¹ Conversion factor glucose to Ethanol
-Yex = 0.6 # gg⁻¹ Conversion factor ethanol to biomass
+using Printf, LinearAlgebra, Symbolics, DifferentialEquations
 
-# Initial Conditions for the extended Kalman Filter
-initial_biomass_concentration = 2.4 # gL⁻¹
-initial_glucose_concentration = 5.0 # gL⁻¹
-initial_ethanol_concentration = 0.1 # gL⁻¹
-initial_max_growth_rate_on_glucose = 0.14 # h⁻¹
-initial_max_growth_rate_on_ethanol = 0.07 # h⁻¹
-initial_estimation_error_covariance_matrix = Diagonal([0.02 for cat in 1:5]) # 5x5 Diagonal matrix, where the value of the first 3 diag elements is 5*0.02g²L², and the last 2 is 0.02h⁻²
+include("./data/BC2_eth_pred.jl")
+include("./data/BC2.jl")
+include("./data/ME.jl")
+include("./data/time.jl")
+include("./data/timeE.jl")
+# include("./data/P.jl")
 
-#############################################################################################   
 # Symbols for symbolic math calculations
-G,E,X,P,t = 0,0,0,0,0
-Y_gx,Y_ge,Y_ex,mu1,mu2,K_M_G,K_M_E = 0,0,0,0,0
+@variables G E X P t
+@variables Y_gx Y_ge Y_ex mu1 mu2 K_M_G K_M_E
 
 #Variables and Parameters
-initX = [2.5; 6; 0.2; 0.15; 0.08] # Initial State (Biomass, Glucose, Ethanol, MaxGrowthRate on Glucose, Max Growth Rate on Ethanol)
+initX = [2.5; 6.0; 0.2; 0.15; 0.08] # Initial State (Biomass, Glucose, Ethanol,
+  # MaxGrowthRate on Glucose, Max Growth Rate on Ethanol) = (X, G, E, K_M_G, K_M_E)
 initP = Diagonal([0.1,0.02,0.02,0.02,0.02]) # Initial Process Estimation / Initial Estimation Error Covariance Matrix
 (initPRows, initPColumns) = size(initP)
 init = [initX;reshape(initP,initPRows * initPColumns)] # Combined initial value vector
@@ -44,12 +36,85 @@ Yex=0.43; # Yield ethanol -> biomass
 mue1 = mu1*G /(G+K_M_G);
 mue2 = mu2*E /(E+K_M_E) * (1 - mue1/mu1);
 
-#Model OD
-function myODE!(sol, X,G,E,umaxG, umaxE)
-    sol[1]=X*( mue1 + mue2); # Biomass
-    sol[2]=X*-mue1/Y_gx; # Glucose
-    sol[3]=( mue1/Y_gx*Y_ge - mue2/Y_ex); # Ethanol
-    sol[4]=0; # mue1
-    sol[5]=0; # mue2
-end
+#Model ODE
+dS = X * [ ( mue1  + mue2) ; # Biomass
+ -mue1/Y_gx  ; # Glucose
+ ( mue1/Y_gx*Y_ge - mue2/Y_ex) ; # Ethanol
+ 0;   # Maximum Specific Growth Rate on Glucose
+ 0;   # Maximum Specific Growth Rate on Ethanol
+ ];
 
+# Jacobian of Model with respect to state variables
+F = Symbolics.jacobian(dS,[X,G,E,mu1,mu2]) # jacobian(matriz com as funções, lista com as variáveis a respeito das quais estamos tomando o jacobiano)
+P = initP
+dP = F * P + P * F' + Q # Defines the function dP
+
+# Simulation / State prediction and filtering
+# Replace all symbolic parameters with their respective numeric values where needed
+F = substitute(F, Dict(Y_gx=>Ygx, Y_ge=>Yge, Y_ex=>Yex, K_M_G=>K1, K_M_E=>K2));
+dS = substitute(dS, Dict(Y_gx=>Ygx, Y_ge=>Yge, Y_ex=>Yex, K_M_G=>K1, K_M_E=>K2));
+dP = substitute(dP, Dict(Y_gx=>Ygx, Y_ge=>Yge, Y_ex=>Yex, K_M_G=>K1, K_M_E=>K2));
+
+println("Printing dS")
+println(dS)
+
+# Build the ODE function to feed the solver
+function tkftcp!(du,u,p,t) # The Kalman Filter For the Cultivation Process's equation
+  du[1] = substitute(dS[1], Dict([ X=>u[1], G=>u[2], E=>u[3], mu1=>u[4], mu2=>u[5] ]) ).val
+  du[2] = substitute(dS[2], Dict([ X=>u[1], G=>u[2], E=>u[3], mu1=>u[4], mu2=>u[5] ]) ).val
+  du[3] = substitute(dS[3], Dict([ X=>u[1], G=>u[2], E=>u[3], mu1=>u[4], mu2=>u[5] ]) ).val
+  du[4] = substitute(dS[4], Dict([ X=>u[1], G=>u[2], E=>u[3], mu1=>u[4], mu2=>u[5] ]) ).val
+  du[5] = substitute(dS[5], Dict([ X=>u[1], G=>u[2], E=>u[3], mu1=>u[4], mu2=>u[5] ]) ).val
+end
+#println("Tipo do tempo é:")
+#println(typeof(time))
+#time2 = convert(Array{Real}, time)
+#println("Tipo do tempo é:")
+#println(typeof(time2))
+
+#println("Typeof initX is:")
+#println(typeof(initX))
+#initX = convert(Array{Real}, initX)
+#println("Typeof initX is:")
+#println(typeof(initX))
+
+#println("Timespan end is:")
+#println(time2[end])
+#println("Type of timespan is:")
+#println(typeof(time2[end]))
+
+tspan = (0.0,time[end])
+prob = ODEProblem{true}(tkftcp!,initX,tspan)
+sol = solve(prob,save_everystep=true)
+println("Displaying Solution")
+display(sol)
+println("Finished displaying solution.")
+
+# Simulate the process from one ethanol gas measurement time to the next:
+t0 = 0;
+MC = zeros(0,5); # store filtered states in these variables
+SimState = zeros(0,5);
+SimTime = [];
+
+
+# STARTING LOOP ################################################
+#for i = 1:length(timeE)
+# tspan = [t0 timeE(i)];
+# [T,state] = ode45(OdeSys, tspan, init); #  simulate / solve model
+# PS = state(end,1:5)';  #  predicted state
+# MS = ME(i);   #  measured state
+# P = reshape(state(end,6:end),5,5); #  process covariance matrix
+# K = P*H'/(H*P*H'+R);  #  kalman gain matrix
+# disp(P*H')
+# FS = PS + K * (MS-PS(3));  #  filtered state
+# Pfilt = P-K*H*P ;   #  filtered process covariance matrix
+# init = [FS; Pfilt(:)];   #  new initial condition
+# t0 = timeE(i);   #  new starting time for next iteration
+#
+# #  Save intermediate states for plotting
+# MC  = [MC;FS'];
+# state(end,1:3) = NaN;
+# SimState = [SimState; state(:,1:5)];
+# SimTime = [SimTime; T];
+#end
+println("Fin")
