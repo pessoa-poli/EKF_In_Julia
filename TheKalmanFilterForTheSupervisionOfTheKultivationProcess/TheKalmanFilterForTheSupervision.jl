@@ -6,6 +6,7 @@ include("./data/ME.jl")
 include("./data/time.jl")
 include("./data/timeE.jl")
 # include("./data/P.jl")
+using Plots
 
 # Symbols for symbolic math calculations
 @variables G E X P t
@@ -55,6 +56,8 @@ F = substitute(F, Dict(Y_gx=>Ygx, Y_ge=>Yge, Y_ex=>Yex, K_M_G=>K1, K_M_E=>K2));
 dS = substitute(dS, Dict(Y_gx=>Ygx, Y_ge=>Yge, Y_ex=>Yex, K_M_G=>K1, K_M_E=>K2));
 dP = substitute(dP, Dict(Y_gx=>Ygx, Y_ge=>Yge, Y_ex=>Yex, K_M_G=>K1, K_M_E=>K2));
 
+# function P_Update(oldP, )
+
 println("Printing dS")
 println(dS)
 
@@ -66,36 +69,25 @@ function tkftcp!(du,u,p,t) # The Kalman Filter For the Cultivation Process's equ
   du[4] = substitute(dS[4], Dict([ X=>u[1], G=>u[2], E=>u[3], mu1=>u[4], mu2=>u[5] ]) ).val
   du[5] = substitute(dS[5], Dict([ X=>u[1], G=>u[2], E=>u[3], mu1=>u[4], mu2=>u[5] ]) ).val
 end
-#println("Tipo do tempo é:")
-#println(typeof(time))
-#time2 = convert(Array{Real}, time)
-#println("Tipo do tempo é:")
-#println(typeof(time2))
-
-#println("Typeof initX is:")
-#println(typeof(initX))
-#initX = convert(Array{Real}, initX)
-#println("Typeof initX is:")
-#println(typeof(initX))
-
-#println("Timespan end is:")
-#println(time2[end])
-#println("Type of timespan is:")
-#println(typeof(time2[end]))
 
 tspan = (0.0,time[end])
-prob = ODEProblem{true}(tkftcp!,initX,tspan)
+prob = ODEProblem(tkftcp!,initX,tspan)
+solutions = []
+
 sol = solve(prob,save_everystep=true)
-println("Displaying Solution")
-display(sol)
-println("Finished displaying solution.")
+plot(sol)
+savefig("./charts/result.png")
 
 # Simulate the process from one ethanol gas measurement time to the next:
 t0 = 0;
-MC = zeros(0,5); # store filtered states in these variables
-SimState = zeros(0,5);
-SimTime = [];
+# MC = zeros(0,5); # store filtered states in these variables
+# SimState = zeros(0,5);
+# SimTime = [];
 
+#for time in timeE
+#  tspan = [t0, time]
+#  
+#end
 
 # STARTING LOOP ################################################
 #for i = 1:length(timeE)
