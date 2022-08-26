@@ -20,10 +20,11 @@ initP = Diagonal([0.1,0.02,0.02,0.02,0.02]) # Initial Process Estimation / Initi
 init = [initX;reshape(initP,initPRows * initPColumns)] # Combined initial value vector
 
 # For the odesolver
-H = [0,0,1,0,0] # Observation Matrix
+H = [0 0 1 0 0] # Observation Matrix
 Q = Diagonal([0.001,0.001,0.001,0.001,0.001]) # Process Noise Covariance Matrix
 
-R = 0.05 # Measurement noise covariance matrix
+# R = ones(5,5) * 0.5 # Measurement noise covariance matrix
+R = 0.5 # Measurement noise covariance matrix
 K1 = 0.1 # Monod Constant Glucose
 K2 = 0.1 # Monod Constant Ethanol
 
@@ -83,25 +84,48 @@ end
 Y_Biomass = []
 Y_Glucose = []
 Y_Ethanol = []
-currentTime = 0.0
+initialTime = 0.0
 
-for i in timeE
-  global initX, currentTime
-  tspan = (currentTime,i)
+for i in length(timeE)
+  # declare outside variables
+  global initX, initialTime, P
+  et = timeE[i] # current end time
+  tspan = (initialTime,et)
   prob = ODEProblem(tkftcp!,initX,tspan)
+
+  # predict
   sol = solve(prob, save_everystep=false)
-  currentTime = tspan[2]
-  append!(Y_Biomass, sol(i)[1])
-  append!(Y_Glucose, sol(i)[2])
-  append!(Y_Ethanol, sol(i)[3])
-  initX = [sol(i)[1], sol(i)[2], sol(i)[3], sol(i)[4], sol(i)[5]]
+  PS = sol(et)[1:3]; # predicted state vector
+
+  # update
+  MS = ME[i];                # measured state
+  a1 = P*H' # P is 5x5, H is?
+  a2 = H*P*H'
+  println(P)
+  println("a2")
+  display(a2)
+  println(a2)
+  a3 = a2[1:1][1] + R
+  K =  a1/a3;      # Kalman Gain Matrix
+  FS = PS + K * (MS-PS[3]);  # Filtered State
+  Pfilt = P-K*H*P;           # Filtered Process
+  initX = [FS; Pfilt(:)];    # New Initial Conditions
+  currentTime = tspan[2]     # New Starting Time
+
+  # Save intermediate State for plotting
+  append!(Y_Biomass, PS[1])
+  append!(Y_Glucose, PS[2])
+  append!(Y_Ethanol, PS[3])
+  initX = [sol(et)[1], sol(et)[2], sol(et)[3], sol(et)[4], sol(et)[5]]
+
+
 end
 
 # Plotting
 plot(timeE, Y_Biomass)
 plot!(timeE, Y_Glucose)
 plot!(timeE, Y_Ethanol)
-savefig("./charts/result_loopedFixed.png")
+savefig("./charts/result_updated.png")
 println("Fin")
 
 
