@@ -46,7 +46,7 @@ dS = X * [ ( mue1  + mue2) ; # Biomass
  ];
 
 # Jacobian of Model with respect to state variables
-F = Symbolics.jacobian(dS,[X,G,E,mu1,mu2]) # jacobian(matriz com as funções, lista com as variáveis a respeito das quais estamos tomando o jacobiano)
+F = Symbolics.jacobian(dS,[X,G,E,mu1,mu2]) # jacobian(matrix with each function separated by ';', list with the dependent variables)
 P = initP
 dP = F * P + P * F' + Q # Defines the function dP
 
@@ -70,16 +70,43 @@ function tkftcp!(du,u,p,t) # The Kalman Filter For the Cultivation Process's equ
   du[5] = substitute(dS[5], Dict([ X=>u[1], G=>u[2], E=>u[3], mu1=>u[4], mu2=>u[5] ]) ).val
 end
 
-tspan = (0.0,time[end])
-prob = ODEProblem(tkftcp!,initX,tspan)
-solutions = []
+#### PLOTTING WITHOUT UPDATE 
+# tspan = (0.0,time[end])
+# prob = ODEProblem(tkftcp!,initX,tspan)
+# solutions = []
+# sol = solve(prob,save_everystep=true)
+# plot(sol)
+# savefig("./charts/result.png")
+############################
 
-sol = solve(prob,save_everystep=true)
-plot(sol)
-savefig("./charts/result.png")
+## Y values to store at each step
+Y_Biomass = []
+Y_Glucose = []
+Y_Ethanol = []
+currentTime = 0.0
+
+for i in timeE
+  global initX, currentTime
+  tspan = (currentTime,i)
+  prob = ODEProblem(tkftcp!,initX,tspan)
+  sol = solve(prob, save_everystep=false)
+  currentTime = tspan[2]
+  append!(Y_Biomass, sol(i)[1])
+  append!(Y_Glucose, sol(i)[2])
+  append!(Y_Ethanol, sol(i)[3])
+  initX = [sol(i)[1], sol(i)[2], sol(i)[3], sol(i)[4], sol(i)[5]]
+end
+
+# Plotting
+plot(timeE, Y_Biomass)
+plot!(timeE, Y_Glucose)
+plot!(timeE, Y_Ethanol)
+savefig("./charts/result_loopedFixed.png")
+println("Fin")
+
 
 # Simulate the process from one ethanol gas measurement time to the next:
-t0 = 0;
+# t0 = 0;
 # MC = zeros(0,5); # store filtered states in these variables
 # SimState = zeros(0,5);
 # SimTime = [];
@@ -109,4 +136,3 @@ t0 = 0;
 # SimState = [SimState; state(:,1:5)];
 # SimTime = [SimTime; T];
 #end
-println("Fin")

@@ -6,9 +6,9 @@ gr()
 
 @variables s s0 v0 a t
 
-function s!(du,u,p,t) 
-    f = s0 + v0*t + (a*t^2)/2
-    du = substitute(f, Dict([a=>du[1], v0=>du[2], s0=>du[3]]))
+function ds!(du,u,p,t) 
+    s = s0 + v0*t + (a*t^2)/2
+    du = substitute(s, Dict([a=>du[1], v0=>du[2], s0=>du[3]]))
 end
 
 
