@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Aug 25 21:43:11 2022
+# Make data base, printed on Sat Aug 27 10:34:08 2022
 
 # Variables
 
@@ -17,7 +17,7 @@ make: *** No rule to make target 'all'.  Stop.
 # automatic
 ?F = $(notdir $?)
 # environment
-WSLENV = VSCODE_WSL_EXT_LOCATION/up:VSCODE_SERVER_TAR/up
+WSLENV = VSCODE_WSL_EXT_LOCATION/up
 # default
 .SHELLFLAGS := -c
 # automatic
@@ -53,9 +53,7 @@ XDG_RUNTIME_DIR = /mnt/wslg/runtime-dir
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-387b907b-f860-4c7b-940a-67289f901366.sock
-# environment
-VSCODE_SERVER_TAR = /mnt/c/Users/LEMPB~1.MEG/AppData/Local/Temp/vscode-remote-wsl/e4503b30fc78200f846c62cf8091b76ff5547662/vscode-server-stable-linux-x64.tar.gz
+VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-9f3ee166-3681-4a16-a454-3ee7dc837731.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -69,7 +67,7 @@ PWD = /home/luado/projetos/EKF_In_Julia
 # default
 .LOADED := 
 # environment
-WSL_INTEROP = /run/WSL/8_interop
+WSL_INTEROP = /run/WSL/11_interop
 # environment
 PULSE_SERVER = /mnt/wslg/PulseServer
 # environment
@@ -151,7 +149,7 @@ WSL_DISTRO_NAME = Ubuntu-20.04
 # environment
 MOTD_SHOWN = update-motd
 # variable set hash-table stats:
-# Load=69/1024=7%, Rehash=0, Collisions=4/94=4%
+# Load=68/1024=7%, Rehash=0, Collisions=4/93=4%
 
 # Pattern-specific Variable Values
 
@@ -159,9 +157,9 @@ MOTD_SHOWN = update-motd
 
 # Directories
 
-# . (device 2080, inode 41148): 13 files, no impossibilities.
+# . (device 2080, inode 41148): 14 files, no impossibilities.
 
-# 13 files, no impossibilities in 1 directories.
+# 14 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -213,12 +211,12 @@ main:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 20 / storage = 212 B / avg = 10 B
-# current buf: size = 8162 B / used = 212 B / count = 20 / avg = 10 B
+# strcache buffers: 1 (0) / strings = 21 / storage = 221 B / avg = 10 B
+# current buf: size = 8162 B / used = 221 B / count = 21 / avg = 10 B
 
-# strcache performance: lookups = 26 / hit rate = 23%
+# strcache performance: lookups = 27 / hit rate = 22%
 # hash-table stats:
-# Load=20/8192=0%, Rehash=0, Collisions=1/26=4%
-# Finished Make data base on Thu Aug 25 21:43:11 2022
+# Load=21/8192=0%, Rehash=0, Collisions=1/27=4%
+# Finished Make data base on Sat Aug 27 10:34:08 2022
 
  
