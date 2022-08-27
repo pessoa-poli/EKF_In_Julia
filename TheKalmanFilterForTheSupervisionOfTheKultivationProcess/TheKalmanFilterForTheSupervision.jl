@@ -98,16 +98,23 @@ for i in length(timeE)
   PS = sol(et)[1:3]; # predicted state vector
 
   # update
-  MS = ME[i];                # measured state
-  a1 = P*H' # P is 5x5, H is?
+  MS = ME[i];                # measured state (Ethanol Values)
+  a1 = P*H'
   a2 = H*P*H'
-  println(P)
-  println("a2")
-  display(a2)
-  println(a2)
   a3 = a2[1:1][1] + R
-  K =  a1/a3;      # Kalman Gain Matrix
-  FS = PS + K * (MS-PS[3]);  # Filtered State
+  K =  a1/a3;             # Kalman Gain Matrix
+  fs1 = MS - PS[3]
+  println("Valor fs1")
+  display(fs1)
+  println("--")
+  println(fs1)
+
+  println("Valor K")
+  display(K)
+  println("--")
+  println(K)
+  fs2 = K * fs1
+  FS = PS + fs2;  # Filtered State
   Pfilt = P-K*H*P;           # Filtered Process
   initX = [FS; Pfilt(:)];    # New Initial Conditions
   currentTime = tspan[2]     # New Starting Time
