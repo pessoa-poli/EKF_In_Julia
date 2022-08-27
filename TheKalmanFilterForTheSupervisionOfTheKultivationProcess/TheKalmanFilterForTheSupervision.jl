@@ -101,7 +101,7 @@ end
 plot(timeE, Y_Biomass)
 plot!(timeE, Y_Glucose)
 plot!(timeE, Y_Ethanol)
-savefig("./charts/result_loopedFixed.png")
+savefig("./charts/result_chart.png")
 println("Fin")
 
 
