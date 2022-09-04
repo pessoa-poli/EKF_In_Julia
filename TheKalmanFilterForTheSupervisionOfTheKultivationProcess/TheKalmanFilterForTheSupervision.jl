@@ -9,7 +9,7 @@ include("./data/timeE.jl")
 using Plots
 
 # Charts file:
-charts_file = "./charts/result_chart.png"
+charts_file = "./charts/result_chart_with_update.png"
 # Symbols for symbolic math calculations
 @variables G E X P t
 
@@ -23,7 +23,7 @@ initP = Diagonal([0.1,0.02,0.02,0.02,0.02]) # Initial Process Estimation / Initi
 init = [initX;reshape(initP,initPRows * initPColumns)] # Combined initial value vector
 
 # For the odesolver
-H = [0,0,1,0,0] # Observation Matrix
+H = [0 0 1 0 0] # Observation Matrix
 Q = Diagonal([0.001,0.001,0.001,0.001,0.001]) # Process Noise Covariance Matrix
 
 R = 0.05 # Measurement noise covariance matrix
@@ -88,57 +88,41 @@ Y_Glucose = []
 Y_Ethanol = []
 currentTime = 0.0
 
-for i in timeE
-  global initX, currentTime
+println("Starting Simulation run&record phase.")
+for t_index = eachindex(timeE)
+  i = timeE[t_index]
+  global initX, currentTime,P
   tspan = (currentTime,i)
   prob = ODEProblem(tkftcp!,initX,tspan)
   sol = solve(prob, save_everystep=false)
   currentTime = tspan[2]
+  MS = ME[t_index]
+  res1 = (P*H')
+  res2 = H*P*H'
+  s = size(res2)
+  res3 = (H*P*H' + ones(s[1],s[2])*R)
+  K = res1/res3 # Kalman Gain matrix
+  PS = [cat for cat=sol(i)[1:5]]
+  FS = PS + K * (MS-PS[3]) #Filtered state
+  Pfilt = P-K*H*P # filtered process covariance matrix
+  
+  # append!(Y_Biomass, sol(i)[1])
+  # append!(Y_Glucose, sol(i)[2])
+  # append!(Y_Ethanol, sol(i)[3])
 
+  append!(Y_Biomass, FS[1])
+  append!(Y_Glucose, FS[2])
+  append!(Y_Ethanol, FS[3])
 
-  append!(Y_Biomass, sol(i)[1])
-  append!(Y_Glucose, sol(i)[2])
-  append!(Y_Ethanol, sol(i)[3])
   initX = [sol(i)[1], sol(i)[2], sol(i)[3], sol(i)[4], sol(i)[5]]
+  P = Pfilt
 end
 
 # Plotting
+println("Starting Plotting Phase")
 plot(timeE, Y_Biomass, label="Biomass")
 plot!(timeE, Y_Glucose, label="Glucose")
 plot!(timeE, Y_Ethanol, label="Ethanol")
 savefig(charts_file)
 println("Saved chart to $charts_file.")
 println("Fin")
-
-
-# Simulate the process from one ethanol gas measurement time to the next:
-# t0 = 0;
-# MC = zeros(0,5); # store filtered states in these variables
-# SimState = zeros(0,5);
-# SimTime = [];
-
-#for time in timeE
-#  tspan = [t0, time]
-#  
-#end
-
-# STARTING LOOP ################################################
-#for i = 1:length(timeE)
-# tspan = [t0 timeE(i)];
-# [T,state] = ode45(OdeSys, tspan, init); #  simulate / solve model
-# PS = state(end,1:5)';  #  predicted state
-# MS = ME(i);   #  measured state
-# P = reshape(state(end,6:end),5,5); #  process covariance matrix
-# K = P*H'/(H*P*H'+R);  #  kalman gain matrix
-# disp(P*H')
-# FS = PS + K * (MS-PS(3));  #  filtered state
-# Pfilt = P-K*H*P ;   #  filtered process covariance matrix
-# init = [FS; Pfilt(:)];   #  new initial condition
-# t0 = timeE(i);   #  new starting time for next iteration
-#
-# #  Save intermediate states for plotting
-# MC  = [MC;FS'];
-# state(end,1:3) = NaN;
-# SimState = [SimState; state(:,1:5)];
-# SimTime = [SimTime; T];
-#end
