@@ -8,6 +8,7 @@ include("./data/timeE.jl")
 # include("./data/P.jl")
 using Plots
 
+println("Defining symbolic variables, initial value and system matrices...")
 # Charts file:
 charts_file = "./charts/result_chart_with_update.png"
 # Symbols for symbolic math calculations
@@ -86,6 +87,8 @@ end
 Y_Biomass = []
 Y_Glucose = []
 Y_Ethanol = []
+Y_KMG     = []
+Y_KME     = []
 currentTime = 0.0
 
 println("Starting Simulation run&record phase.")
@@ -105,14 +108,12 @@ for t_index = eachindex(timeE)
   PS = [cat for cat=sol(i)[1:5]]
   FS = PS + K * (MS-PS[3]) #Filtered state
   Pfilt = P-K*H*P # filtered process covariance matrix
-  
-  # append!(Y_Biomass, sol(i)[1])
-  # append!(Y_Glucose, sol(i)[2])
-  # append!(Y_Ethanol, sol(i)[3])
 
   append!(Y_Biomass, FS[1])
   append!(Y_Glucose, FS[2])
   append!(Y_Ethanol, FS[3])
+  append!(Y_KMG,     FS[4])
+  append!(Y_KME,     FS[5])
 
   initX = [sol(i)[1], sol(i)[2], sol(i)[3], sol(i)[4], sol(i)[5]]
   P = Pfilt
@@ -123,6 +124,8 @@ println("Starting Plotting Phase")
 plot(timeE, Y_Biomass, label="Biomass")
 plot!(timeE, Y_Glucose, label="Glucose")
 plot!(timeE, Y_Ethanol, label="Ethanol")
+plot!(timeE, Y_KMG, label="KM_G")
+plot!(timeE, Y_KME, label="KM_E")
 savefig(charts_file)
 println("Saved chart to $charts_file.")
 println("Fin")
