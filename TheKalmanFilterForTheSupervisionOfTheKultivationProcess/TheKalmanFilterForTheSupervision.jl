@@ -8,8 +8,11 @@ include("./data/timeE.jl")
 # include("./data/P.jl")
 using Plots
 
+# Charts file:
+charts_file = "./charts/result_chart.png"
 # Symbols for symbolic math calculations
 @variables G E X P t
+
 @variables Y_gx Y_ge Y_ex mu1 mu2 K_M_G K_M_E
 
 #Variables and Parameters
@@ -58,8 +61,8 @@ dP = substitute(dP, Dict(Y_gx=>Ygx, Y_ge=>Yge, Y_ex=>Yex, K_M_G=>K1, K_M_E=>K2))
 
 # function P_Update(oldP, )
 
-println("Printing dS")
-println(dS)
+# println("Printing dS")
+# println(dS)
 
 # Build the ODE function to feed the solver
 function tkftcp!(du,u,p,t) # The Kalman Filter For the Cultivation Process's equation
@@ -91,6 +94,8 @@ for i in timeE
   prob = ODEProblem(tkftcp!,initX,tspan)
   sol = solve(prob, save_everystep=false)
   currentTime = tspan[2]
+
+
   append!(Y_Biomass, sol(i)[1])
   append!(Y_Glucose, sol(i)[2])
   append!(Y_Ethanol, sol(i)[3])
@@ -98,10 +103,11 @@ for i in timeE
 end
 
 # Plotting
-plot(timeE, Y_Biomass)
-plot!(timeE, Y_Glucose)
-plot!(timeE, Y_Ethanol)
-savefig("./charts/result_chart.png")
+plot(timeE, Y_Biomass, label="Biomass")
+plot!(timeE, Y_Glucose, label="Glucose")
+plot!(timeE, Y_Ethanol, label="Ethanol")
+savefig(charts_file)
+println("Saved chart to $charts_file.")
 println("Fin")
 
 
