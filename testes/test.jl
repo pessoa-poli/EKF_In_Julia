@@ -24,3 +24,5 @@ println(ar)
 
 # Getting a diagonal matrix with a given size and given diagonal value:
 println(Diagonal([0.02 for cat in 1:5]))
+println("printing range")
+println([1,2,3,4,5][1:2])

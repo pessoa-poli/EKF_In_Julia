@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Aug 27 10:34:08 2022
+# Make data base, printed on Mon Sep 19 15:29:50 2022
 
 # Variables
 
@@ -31,9 +31,9 @@ CURDIR := /home/luado/projetos/EKF_In_Julia
 # makefile
 SHELL = /bin/sh
 # environment
-VSCODE_NLS_CONFIG = {"locale":"pt-br","availableLanguages":{"*":"pt-br"},"_languagePackId":"8e7a008e83c664b9876a8f72ff0490ae.pt-br","_translationsConfigFile":"/home/luado/.vscode-server/data/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br/tcf.json","_cacheRoot":"/home/luado/.vscode-server/data/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br","_resolvedLanguagePackCoreLocation":"/home/luado/.vscode-server/data/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br/e4503b30fc78200f846c62cf8091b76ff5547662","_corruptedFile":"/home/luado/.vscode-server/data/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br/corrupted.info","_languagePackSupport":true}
+VSCODE_NLS_CONFIG = {"locale":"pt-br","availableLanguages":{"*":"pt-br"},"_languagePackId":"8e3dc13031d424b1c863f56fbf15ff61.pt-br","_translationsConfigFile":"/home/luado/.vscode-server/data/clp/8e3dc13031d424b1c863f56fbf15ff61.pt-br/tcf.json","_cacheRoot":"/home/luado/.vscode-server/data/clp/8e3dc13031d424b1c863f56fbf15ff61.pt-br","_resolvedLanguagePackCoreLocation":"/home/luado/.vscode-server/data/clp/8e3dc13031d424b1c863f56fbf15ff61.pt-br/74b1f979648cc44d385a2286793c226e611f59e7","_corruptedFile":"/home/luado/.vscode-server/data/clp/8e3dc13031d424b1c863f56fbf15ff61.pt-br/corrupted.info","_languagePackSupport":true}
 # environment
-_ = /home/luado/.vscode-server/bin/e4503b30fc78200f846c62cf8091b76ff5547662/node
+_ = /home/luado/.vscode-server/bin/74b1f979648cc44d385a2286793c226e611f59e7/node
 # makefile (from 'Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
 # 'override' directive
@@ -47,13 +47,13 @@ VSCODE_CWD = /mnt/c/Users/lempb.MEGAZORD/AppData/Local/Programs/Microsoft VS Cod
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
-PATH = /home/luado/.vscode-server/bin/e4503b30fc78200f846c62cf8091b76ff5547662/bin/remote-cli:/home/luado/julia/julia-1.7.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Python310/Scripts/:/mnt/c/Python310/:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/Program Files/MATLAB/R2022a/runtime/win64:/mnt/c/Program Files/MATLAB/R2022a/bin:/mnt/c/Program Files/nodejs/:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Users/lempb.MEGAZORD/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/lempb.MEGAZORD/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Program Files/JetBrains/DataGrip 2022.2.1/bin:/mnt/c/Users/lempb.MEGAZORD/AppData/Roaming/npm:/snap/bin:/home/luado/CAM/bin:/home/luado/golang/go/bin
+PATH = /home/luado/.vscode-server/bin/74b1f979648cc44d385a2286793c226e611f59e7/bin/remote-cli:/home/luado/julia/julia-1.7.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/snap/bin:/home/luado/CAM/bin:/home/luado/golang/go/bin
 # environment
 XDG_RUNTIME_DIR = /mnt/wslg/runtime-dir
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-9f3ee166-3681-4a16-a454-3ee7dc837731.sock
+VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-77334f72-1793-4d6e-af06-a151361547e0.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -67,7 +67,7 @@ PWD = /home/luado/projetos/EKF_In_Julia
 # default
 .LOADED := 
 # environment
-WSL_INTEROP = /run/WSL/11_interop
+WSL_INTEROP = /run/WSL/29701_interop
 # environment
 PULSE_SERVER = /mnt/wslg/PulseServer
 # environment
@@ -79,7 +79,7 @@ LESSCLOSE = /usr/bin/lesspipe %s %s
 # environment
 LOGNAME = luado
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
@@ -146,10 +146,8 @@ LANG = C
 TERM = xterm-256color
 # environment
 WSL_DISTRO_NAME = Ubuntu-20.04
-# environment
-MOTD_SHOWN = update-motd
 # variable set hash-table stats:
-# Load=68/1024=7%, Rehash=0, Collisions=4/93=4%
+# Load=67/1024=7%, Rehash=0, Collisions=4/92=4%
 
 # Pattern-specific Variable Values
 
@@ -157,9 +155,9 @@ MOTD_SHOWN = update-motd
 
 # Directories
 
-# . (device 2080, inode 41148): 14 files, no impossibilities.
+# . (device 2080, inode 41148): 11 files, no impossibilities.
 
-# 14 files, no impossibilities in 1 directories.
+# 11 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -185,6 +183,7 @@ all:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
+ 
 #  Last modified 2022-08-21 16:43:49.938872408
 #  File has been updated.
 #  Successfully updated.
@@ -211,12 +210,12 @@ main:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 21 / storage = 221 B / avg = 10 B
-# current buf: size = 8162 B / used = 221 B / count = 21 / avg = 10 B
+# strcache buffers: 1 (0) / strings = 18 / storage = 194 B / avg = 10 B
+# current buf: size = 8162 B / used = 194 B / count = 18 / avg = 10 B
 
-# strcache performance: lookups = 27 / hit rate = 22%
+# strcache performance: lookups = 24 / hit rate = 25%
 # hash-table stats:
-# Load=21/8192=0%, Rehash=0, Collisions=1/27=4%
-# Finished Make data base on Sat Aug 27 10:34:08 2022
+# Load=18/8192=0%, Rehash=0, Collisions=1/24=4%
+# Finished Make data base on Mon Sep 19 15:29:50 2022
 
  
